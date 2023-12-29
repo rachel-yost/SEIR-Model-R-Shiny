@@ -1,0 +1,137 @@
+---
+title: "BangaBolsterYostREADME"
+author: "Rachel Yost"
+date: "2023-12-12"
+output: html_document
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(message=FALSE,
+                      warning=FALSE,
+                      error=FALSE,
+                      echo = FALSE,
+                      fig.pos = "H" ,
+                      fig.align = 'center')
+```
+# ReadMe {#sec-intro}
+
+Interactive age-structured SEIR model
+
+Kitti Banga, Alyssa Bolster, and Rachel Yost
+
+Link to the shiny app: <https://rachel-y.shinyapps.io/final_app/>
+
+# Overview {#sec-overview}
+
+Our shiny app titled “Interactive age-structured SEIR model” allows users to view and interact with a traditional compartmental model for infectious disease rates and transmission by age group. Specific uses of the model include:
+
+- Ability to select simulation of disease for different age groups
+
+- Ability to modify $\beta$, $\sigma$, and $\gamma$ (further defined below)
+
+- Ability to compare among different age groups with modified data
+
+- Return of traditional SEIR plot for model interpretation
+
+We provide a brief explanation of our [model](sec-structure), then instruct users how to [install](sec-installations) (run) our model in the shiny app environment. Running the baseline model and also running a modified model (dictated by user inputs) are explained in [GettingStarted](sec-gettingstarted). To further animate the plot, see [AnimatingTheOutput](sec-animating). For some basic guidelines for interpreting the output of the model in the shiny app, see [InterpretingTheOutput](sec-interpreting). For definitions of key terms used throughout this document, see [Definitions](sec-definitions). References cited are listed in the final section of this document.
+
+# ModelStructure {#sec-structure}
+
+![Figure 1. SEIR model structure](SEIRmodel.png) [1]
+
+SEIR (Susceptible-Exposed-Infectious-Recovered) modeling categorizes disease hosts (individuals) into one of four compartments (see Figure 1). Our app then simulates movement of individuals among these different compartments in a given population.
+
+# Installations {#sec-installations}
+
+Tidyr[2], reshape[3], magrittr[4], plyr[5], ggplot2[6], shiny[7], shinythemes[8], dplyr[9], deSolve [10], shinyjs[11] and plotly[12] are packages required to run the app. These packages can each be loaded in by running: library(insert package name). Any dependencies should be installed as well.
+```{r installations}
+library(deSolve)
+library(tidyr)
+library(reshape)
+library(magrittr)
+library(plyr)
+library(ggplot2)
+library(shiny)
+library(shinythemes)
+library(dplyr)
+library(shinyjs)
+library(plotly)
+```
+# GettingStarted {#sec-gettingstarted}
+
+*Running the Baseline Model:*
+
+The baseline parameters are defined in the shiny code. The initial $\beta$ value is set at 1, $\sigma$ is 0.179, and $\gamma$ is 0.5. These parameters were chosen to reflect recent publication’s estimates on the SARS-CoV-2 outbreak in Shanghai 2020 [13]. Additional estimates can be found in Table 2 of SEIR Modeling of the Italian Epidemic of SARS-CoV-2 Using Computational Swarm Intelligence[14].
+
+*Changing Parameters:*
+
+To update the parameters for a different SEIR model, new $\beta$ values, as well as $\sigma$ and $\gamma$ values, can be chosen in the shiny app. The model will reflect the changes once the “Get SEIR Model” button is selected. A specific age group can also be selected in a drop down menu below the rest of the parameters.
+
+# AnimatingTheOutput {#sec-animating}
+
+When filtering by age group, the SEIR plot is further animated to allow the user to zoom to particular moments in the year and thus observe the interactions of different groups over smaller periods. Simply use the drag bars at the bottom of the first tab (showing the plots) to select the period you want to view.
+
+# InterpretingTheOutput {#sec-interpreting}
+
+SEIR models depict the proportion of the population susceptible, exposed, infectious, and recovered for a specific infectious disease. In this app, the data used to generate the model is provided by the user, and age categories can be selected. The age categories are predefined from the 2023 census data collected by the U.S. Census Bureau [15]. The age category chosen is reflected in 𝛽, the probability of infection after exposure.
+
+# Definitions {#sec-definitions}
+
+**SEIR model** → Susceptible-Exposed-Infectious-Removed model
+
+*Model variables:* 
+
+  **Susceptible (S)** → individuals who are vulnerable to modeled disease
+  
+  **Exposed (E)** → individuals who are exposed to modeled disease, inclusive of those experiencing an incubation (asymptomatic and noninfectious) period
+  
+  **Infectious (I)** → individuals who are both infected with and capable of infecting others with the modeled disease
+  
+  **Recovered (R)** → individuals who have recovered (attained immunity) or died from modeled disease
+  
+  **Beta (𝛽)** → contact rate (susceptible → exposed)
+  
+  **Sigma (𝜎)** → incubation rate (exposed → infectious)
+  
+  **Gamma (𝛾)** → recovery rate (infectious → recovered)
+  
+  **Mu (𝜇)** → mortality rate
+  
+*Age groups:*
+
+  **Child** → aged 0-19 years
+  
+  **Adult** → aged 19-50 years
+  
+  **Older Adult** → aged 50-75 years
+  
+*Note: Definition info from [16] and [17]. Coding resources [18] and [19] were also employed for this project.*
+
+# References
+
+1. SEIR - SEIRS model. (n.d.). SEIR and SEIRS models. Retrieved December 7, 2023, from <https://docs.idmod.org/projects/emod-hiv/en/latest/model-seir.html>
+2. Wickham, H., Vaughan. D. and Girlich, M. (2023). _tidyr: Tidy Messy Data_. R package version 1.3.0, <https://CRAN.R-project.org/package=tidyr>
+3. Wickham, H. (2007). Reshaping data with the reshape package. Journal of Statistical Software, 21(12).
+4. Bache, S., Wickham, H. (2022). _magrittr: A Forward-Pipe Operator for R_. R package version 2.0.3, <https://CRAN.R-project.org/package=magrittr>.
+5. Wickham, H. (2011). The Split-Apply-Combine Strategy for Data Analysis. Journal of Statistical Software, 40(1), 1-29. URL https://www.jstatsoft.org/v40/i01/.
+6. Wickham, H. (2016) ggplot2: Elegant Graphics for Data Analysis. Springer-Verlag New York.
+7. Chang, W., Cheng, J., Allaire, J. (2023). _shiny: Web Application Framework for R_. R package version 1.7.5.1, <https://CRAN.R-project.org/package=shiny>.
+8. Chang, W. (2021). _shinythemes: Themes for Shiny_. R package version 1.2.0, <https://CRAN.R-project.org/package=shinythemes>.
+9. Wickham H., François R., Henry L. (2023). _dplyr: A Grammar of Data
+  Manipulation_. R package version 1.1.3, <https://CRAN.R-project.org/package=dplyr>.
+10. Soetaert, K., Petzoldt, T. and Setzer, R. W. (2016). deSolve: General solvers for initial value problems of ordinary differential equations (oDE), partial differential equations (pDE), differential algebraic equations (dAE) and delay differential equations (dDE) [Internet]. Retrieved December 7, 2023, from <https://rdrr.io/cran/deSolve/man/deSolve.html>.
+11. Attali, D. (2021). _shinyjs: Easily Improve the User Experience of Your Shiny Apps in Seconds_. R package version 2.1.0, <https://CRAN.R-project.org/package=shinyjs>.
+12. Sievert, C. (2020). Interactive Web-Based Data Visualization with R, plotly, and shiny. Chapman and Hall/CRC. <https://plotly-r.com>
+13. Peng, L., Yang, W., Zhang, D., Zhuge, C. and Hong, L. (2020). Epidemic analysis of COVID-19 in China by dynamical modeling. MedRxiv Epidemiol. doi: 10.1101/2020.02.16.20023465.
+14. Godio, A., Pace, F. and Vergnano, A. (2020). SEIR Modeling of the Italian Epidemic of SARS-CoV-2 Using Computational Swarm Intelligence. Int J Environ Res Public Health. May 18;17(10):3535. doi: 10.3390/ijerph17103535. PMID: 32443640; PMCID: PMC7277829.
+15. U.S. Census Bureau. (n.d.). Annual Estimates of the Resident Population for Selected Age Groups by Sex for the United States: April 1, 2020 to July 1, 2022 (NC-EST2022-AGESEX) Retrieved December 7, 2023, from <https://www.census.gov/data/tables/time-series/demo/popest/2020s-national-detail.html>
+16. Bjørnstad, O.N., Shea, K., Krzywinski, M. et al. (2020) The SEIRS model for infectious disease dynamics. Nat Methods 17, 557–558. <https://doi.org/10.1038/s41592-020-0856-2>
+17. Keeling, M., Rohani, P. (2008). Modeling Infectious Diseases in humans and animals(pp.82-88). Princeton University Press.
+18. Gleeson, P. (2021). How to model an epidemic with R. freeCodeCamp.org. <https://www.freecodecamp.org/news/how-to-model-an-epidemic-with-r/>
+19. Stocks, T. (2018) Program 3.4 from Keeling and Rohani. epirecipes. <http://epirecip.es/epicookbook/chapters/kr08/3_4/r_desolve>
+
+\newpage
+
+# Code Appendix
+
+```{r ref.label=knitr::all_labels(), echo=TRUE, eval=FALSE}
+```
